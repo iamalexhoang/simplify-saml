@@ -1,6 +1,7 @@
 # Simplify SAML
 
 Simplify SAML is a Chrome extension that turns messy SAML XML metadata into a clear, human-readable summary.  
+
 With a single click, it extracts the key settings you actually care about: entity IDs, ACS / SSO / SLO URLs, NameID formats, and certificates.
 
 No random scanning, no tracking — just click on a SAML metadata page and get the important bits in plain English.
@@ -33,20 +34,15 @@ No random scanning, no tracking — just click on a SAML metadata page and get t
 
 ### Raw SAML Metadata
 
-Screenshot idea: a page full of XML from a SAML metadata URL.
+![Raw SAML Metadata](images/screenshot-1.png)
 
 ### Simplify SAML Summary View
 
-Screenshot idea: the summary tab showing:
-- Type (IdP / SP / both)  
-- Entity ID  
-- ACS / SSO / SLO URLs  
-- NameID formats  
-- Signature status  
+![Simplify SAML Summary View](images/screenshot-2.png)  
 
 ### Certificates & Downloads
 
-Screenshot idea: certificate download buttons and the “Download Summary / Download XML” buttons.
+![Certificates & Downloads](images/screenshot-3.png)
 
 ---
 
