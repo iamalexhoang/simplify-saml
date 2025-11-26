@@ -30,8 +30,6 @@ No random scanning, no tracking — just click on a SAML metadata page and get t
 
 ## 🖼️ Preview
 
-> (Optional: add your own screenshots here once you capture them)
-
 ### Raw SAML Metadata
 
 ![Raw SAML Metadata](images/screenshot-1.png)
