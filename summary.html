@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Simplify SAML – Metadata Summary</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 0 16px 40px;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    h2 {
+      margin-top: 0;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 13px;
+      background: #f5f5f7;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+    .section-title {
+      margin-top: 24px;
+      margin-bottom: 8px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+    button {
+      margin: 4px 8px 4px 0;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      background: #fff;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    button:hover {
+      background: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <h2>Simplify SAML – Metadata Summary</h2>
+  <p>
+    These values were extracted from the SAML metadata on the page where you clicked the
+    extension. Only HTTP-POST ACS / SSO / SLO endpoints are shown.
+  </p>
+
+  <div id="summary"><i>Loading…</i></div>
+
+  <div class="section-title">Certificates</div>
+  <div id="cert-buttons"><i>No certificates loaded yet.</i></div>
+
+  <div class="section-title">Downloads</div>
+  <button id="download-summary">Download Summary (.txt)</button>
+  <button id="download-xml">Download Raw XML (.xml)</button>
+
+  <script src="summary.js"></script>
+</body>
+</html>
