@@ -48,7 +48,7 @@ No random scanning, no tracking — just click on a SAML metadata page and get t
 
 ### Chrome Web Store
 
-> **Chrome Web Store:** _Coming soon_  
+> [📦 Simplify SAML on the Chrome Web Store](https://chromewebstore.google.com/detail/simplify-saml/bhabmigcggnkhhhaaddbfipgngpcnakf)
 
 ### Manual Install (Developer Mode)
 
