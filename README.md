@@ -1,6 +1,6 @@
 # Simplify SAML
 
-Simplify SAML is a Chrome extension that turns messy SAML XML metadata into a clear, human-readable summary.  
+Simplify SAML is a privacy-first open-source Chrome extension for identity, IAM, security, and application teams that need to inspect SAML 2.0 metadata safely. SAML metadata often includes sensitive entity IDs, ACS/SSO/SLO URLs, certificates, and internal service details, so this tool processes everything locally in the browser without analytics, tracking, or external network calls.
 
 With a single click, it extracts the key settings you actually care about: entity IDs, ACS / SSO / SLO URLs, NameID formats, and certificates.
 
