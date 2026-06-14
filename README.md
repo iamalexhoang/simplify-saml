@@ -125,6 +125,66 @@ Simplify SAML is designed to be privacy-first:
 - No external network calls  
 - All data stays in your browser and is only used to render the summary and downloads
 
+## Roadmap
+
+Simplify SAML is an early-stage open-source tool. Planned improvements include:
+
+### Metadata Validation
+
+Add basic checks to help users identify common SAML metadata issues, such as:
+
+* Missing or malformed Entity ID
+* Missing ACS URLs
+* Missing SSO or SLO endpoints
+* Invalid or unexpected XML structure
+* Duplicate or conflicting endpoint entries
+* Missing certificates where signing or encryption is expected
+
+### IdP and SP Detection
+
+Automatically detect whether the uploaded metadata appears to be:
+
+* Identity Provider metadata
+* Service Provider metadata
+* Combined or multi-role metadata
+* Unknown or unsupported metadata format
+
+This will help users quickly understand what type of SAML metadata they are reviewing.
+
+### Certificate Expiration Parsing
+
+Parse embedded X.509 certificates and show useful certificate details, including:
+
+* Certificate subject
+* Certificate issuer
+* Valid from date
+* Expiration date
+* Days until expiration
+* Expired certificate warnings
+* Soon-to-expire certificate warnings
+
+### Algorithm Warnings
+
+Add warnings for outdated, weak, or unexpected signing and digest algorithms, such as:
+
+* SHA-1
+* RSA-SHA1
+* Deprecated digest methods
+* Missing signing algorithm information
+* Unsupported or unusual algorithm values
+
+### Long-Term Ideas
+
+Future improvements may include:
+
+* Safer metadata comparison tools
+* Copy-friendly endpoint summaries
+* Exportable summaries
+* Sample sanitized metadata files
+* Better Chrome extension packaging
+* Additional browser support
+* More accessibility improvements
+
 ---
 
 ## 📄 License
