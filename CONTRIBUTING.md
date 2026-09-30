@@ -170,3 +170,14 @@ When suggesting a feature, please explain:
 If you are unsure whether a contribution fits the project, open a GitHub issue with your idea before starting a large change.
 
 Thank you for helping make SAML metadata easier and safer to understand.
+
+## Version 1.1 architecture notes
+
+Keep parsing, analysis, and presentation separate:
+
+- `parser.js` should remain responsible for turning XML into structured data.
+- `analyzer.js` should turn structured data into checks/observations and exports without making unsupported trust claims.
+- `summary.js` should be presentation-focused and render untrusted metadata with `textContent`/DOM nodes rather than `innerHTML`.
+- `content.js` should stay small and only capture metadata after a user action.
+
+When changing parser behavior, add or update a fixture in `tests/tests.js` where practical.
