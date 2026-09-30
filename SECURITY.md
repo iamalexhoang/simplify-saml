@@ -1,66 +1,53 @@
 # Security Policy
 
-## Supported Versions
+## Supported versions
 
-Simplify SAML is currently in early development. Security fixes will be applied to the latest version of the project.
+| Version | Supported |
+| --- | --- |
+| Latest `main` / 1.1.x | Yes |
+| Older builds and forks | No guarantee |
 
-| Version                | Supported |
-| ---------------------- | --------- |
-| Latest `main` branch   | ✅         |
-| Older commits or forks | ❌         |
+## Reporting a vulnerability
 
-## Reporting a Vulnerability
+Please do not open a public GitHub issue for a security vulnerability.
 
-If you discover a security vulnerability in Simplify SAML, please report it responsibly.
+Contact the maintainer privately at **forthehoangfamily@gmail.com** and include the affected version, reproduction steps, impact, and sanitized proof-of-concept material where possible.
 
-Please do **not** open a public GitHub issue for security vulnerabilities.
+## Security and privacy design
 
-Instead, contact the maintainer privately:
+Simplify SAML 1.1 is intentionally local-first:
 
-**Email:** [forthehoangfamily@gmail.com](mailto:forthehoangfamily@gmail.com)
+- It does not send SAML metadata to an external service.
+- It does not include analytics or tracking.
+- It does not request `<all_urls>` host permission.
+- Page access is granted temporarily through `activeTab` only after a user clicks the extension action.
+- Analysis data is stored in `chrome.storage.session`, which is in-memory for the browser session rather than persistent `storage.local`.
+- Each analysis uses an independent identifier so concurrent inspection tabs do not share one mutable result slot.
+- Old analysis entries are pruned after four hours when a new analysis is created.
+- The UI renders untrusted metadata values with DOM `textContent`, not executable HTML.
 
-Please include as much detail as possible, including:
+## XML signature limitation
 
-* A clear description of the vulnerability
-* Steps to reproduce the issue
-* The affected browser, extension version, or commit
-* Any proof-of-concept details, screenshots, or sample metadata
-* The potential impact
+Version 1.1 can observe XML Signature elements and their declared signature/digest algorithm URIs. It does **not** cryptographically verify XML signatures, establish a certificate trust chain, validate metadata schema conformance, or make a trust decision about the metadata publisher.
 
-I will make a best effort to acknowledge reports within a reasonable time and address confirmed issues as quickly as possible.
+The UI and exports should never describe a Signature element as a verified signature unless cryptographic verification is explicitly implemented and succeeds in a future version.
 
-## Scope
+## Certificate limitation
 
-Security reports may include, but are not limited to:
+Simplify SAML parses X.509 certificate metadata for inspection, fingerprints, key-use context, and validity dates. Certificate parsing does not establish that a key is trusted or that the metadata is authentic.
 
-* Cross-site scripting or unsafe HTML rendering
-* Unsafe parsing of SAML metadata
-* Exposure of sensitive metadata, certificates, URLs, or identifiers
-* Chrome extension permission issues
-* Local data handling concerns
-* Dependency vulnerabilities
-* Build or packaging issues that could affect users
+## Scope for security reports
 
-## Privacy and Local Processing
+Reports may include:
 
-Simplify SAML is designed to process SAML metadata locally in the browser.
+- Unsafe DOM rendering / XSS
+- XML parsing edge cases that produce unsafe behavior
+- Exposure or persistence of metadata, entity IDs, internal URLs, or certificates
+- Unexpected network calls
+- Chrome extension permission issues
+- Session isolation failures
+- Incorrect security claims in the UI
+- Certificate parser crashes or malformed-input handling
+- Packaging issues that alter the security/privacy model
 
-The project should not transmit uploaded or pasted SAML metadata to external servers unless clearly documented and intentionally added in the future.
-
-If you discover behavior that causes SAML metadata, certificates, entity IDs, ACS URLs, SLO URLs, or other sensitive information to be sent outside the local browser environment, please report it as a security issue.
-
-## Disclosure
-
-Please allow time for investigation and remediation before publicly disclosing a vulnerability.
-
-Once a fix is available, the vulnerability may be documented in release notes or a security advisory when appropriate.
-
-## Security Updates
-
-Security updates may be released through:
-
-* Commits to the `main` branch
-* GitHub releases
-* Chrome Web Store updates, if the extension is published there
-
-Users are encouraged to update to the latest available version.
+Please sanitize private production metadata before attaching it to a report whenever possible.
