@@ -1,193 +1,195 @@
 # Simplify SAML
 
-Simplify SAML is a privacy-first open-source Chrome extension for identity, IAM, security, and application teams that need to inspect SAML 2.0 metadata safely. SAML metadata often includes sensitive entity IDs, ACS/SSO/SLO URLs, certificates, and internal service details, so this tool processes everything locally in the browser without analytics, tracking, or external network calls.
+**One-click SAML metadata inspection for Chrome.**
 
-With a single click, it extracts the key settings you actually care about: entity IDs, ACS / SSO / SLO URLs, NameID formats, and certificates.
+Simplify SAML turns SAML 2.0 metadata into the values you actually need to configure an integration.
 
-No random scanning, no tracking — just click on a SAML metadata page and get the important bits in plain English.
+Open a SAML metadata page, click the extension, and get a clean one-screen summary — no uploading metadata, no account, no analytics, and no digging through XML.
 
----
-
-## ✨ Features
-
-- Parses SAML 2.0 metadata (`<EntityDescriptor>`) directly from the current page  
-- Automatically detects:
-  - Entity ID  
-  - Assertion Consumer Service (ACS) URLs (HTTP-POST)  
-  - Single Sign-On (SSO) URLs (HTTP-POST)  
-  - Single Logout (SLO) URLs (HTTP-POST)  
-  - NameID formats  
-  - Whether the metadata is signed, and the signature algorithm (if present)  
-  - Embedded X.509 certificates (with one-click PEM export)
-- Shows a clean, human-readable summary in a separate tab
-- One-click download for:
-  - Summary text (`.txt`)
-  - Raw XML (`.xml`)
-  - Certificates as PEM (`.pem`)
-- All parsing happens **locally** in your browser — nothing is sent to any server
+[Chrome Web Store](https://chromewebstore.google.com/detail/simplify-saml/bhabmigcggnkhhhaaddbfipgngpcnakf) · [Project page](https://iamalexhoang.com/projects/simplify-saml) · [Privacy policy](https://iamalexhoang.com/projects/simplify-saml#privacy)
 
 ---
 
-## 🖼️ Preview
+## What it shows
 
-### Raw SAML Metadata
+Depending on the metadata, Simplify SAML can surface:
 
-![Raw SAML Metadata](images/screenshot-1.png)
+- Entity ID
+- Primary ACS, SSO, and SLO endpoints
+- Alternate endpoints, kept collapsed until needed
+- NameID formats
+- Requested attributes, including required attributes
+- `AuthnRequestsSigned`, `WantAssertionsSigned`, and `WantAuthnRequestsSigned`
+- Signing and encryption certificates
+- Certificate validity dates
+- One-click **Copy PEM** and **Download PEM**
+- Multiple entities from federation metadata
+- Nested `EntitiesDescriptor` metadata
+- Application / organization names when published
+- Conservative IdP/vendor recognition
 
-### Simplify SAML Summary View
+The goal is intentionally simple:
 
-![Simplify SAML Summary View](images/screenshot-2.png)  
-
-### Certificates & Downloads
-
-![Certificates & Downloads](images/screenshot-3.png)
+> **Click → copy the integration values → close.**
 
 ---
 
-## 🚀 Installation
+## Smart simplicity
+
+Simplify SAML keeps complicated metadata simple.
+
+### Primary endpoint selection
+
+When metadata contains multiple endpoints, Simplify SAML quietly chooses the most useful primary value and keeps the rest behind an **alternate** disclosure.
+
+For example:
+
+- Default ACS wins when explicitly marked
+- HTTP-POST is preferred for ACS
+- HTTP-Redirect / HTTP-POST are preferred for SSO and SLO
+- HTTPS is preferred when otherwise equivalent
+
+### Complex federation metadata
+
+Simplify SAML supports:
+
+- Multiple `EntityDescriptor` entries
+- Nested `EntitiesDescriptor` groups
+- Inherited `validUntil` and `cacheDuration`
+- Multiple signing certificates / rollover metadata
+- `AttributeConsumingService`
+- `RequestedAttribute`
+
+Complexity stays in the parser — not in the interface.
+
+---
+
+## Privacy first
+
+Simplify SAML is designed for identity and security workflows where metadata may contain internal URLs, entity identifiers, certificates, and other configuration details.
+
+- Metadata is processed **locally in Chrome**
+- Nothing is uploaded to a Simplify SAML server
+- No analytics
+- No advertising
+- No tracking or telemetry
+- No user accounts
+- No persistent access to every website
+- Analysis results use temporary `chrome.storage.session`
+
+Page access happens only when you explicitly click the extension.
+
+Read the full [Privacy Policy](https://iamalexhoang.com/projects/simplify-saml#privacy).
+
+---
+
+## Permissions
+
+Simplify SAML uses a small Manifest V3 permission set:
+
+### `activeTab`
+
+Temporarily allows access to the current tab after you explicitly click the extension.
+
+### `scripting`
+
+Injects the packaged Simplify SAML content script into that active tab so the displayed metadata can be read.
+
+### `storage`
+
+Uses `chrome.storage.session` to temporarily pass the parsed result and raw XML to the summary page.
+
+Simplify SAML does **not** require `<all_urls>`.
+
+---
+
+## Install
 
 ### Chrome Web Store
 
-> [📦 Simplify SAML on the Chrome Web Store](https://chromewebstore.google.com/detail/simplify-saml/bhabmigcggnkhhhaaddbfipgngpcnakf)
+[**Install Simplify SAML from the Chrome Web Store →**](https://chromewebstore.google.com/detail/simplify-saml/bhabmigcggnkhhhaaddbfipgngpcnakf)
 
-### Manual Install (Developer Mode)
+### Developer mode
 
-1. Clone this repo:
+1. Clone this repository:
+
    ```bash
    git clone https://github.com/iamalexhoang/simplify-saml.git
    ```
-2. Go to `chrome://extensions` in Chrome
-3. Turn on **Developer mode** (top right)
-4. Click **“Load unpacked”**
-5. Select the `simplify-saml/` folder
 
-The extension icon should now appear in your toolbar.
-
----
-
-## ⚙️ How It Works
-
-- `background.js`  
-  - Listens for a click on the Simplify SAML icon  
-  - Injects `content.js` into the current tab using the `scripting` API  
-  - Opens `summary.html` when parsing is finished
-
-- `content.js`  
-  - Reads the current page and tries to find SAML metadata (`<EntityDescriptor>`)  
-  - Extracts:
-    - Entity ID  
-    - ACS / SSO / SLO URLs (HTTP-POST only)  
-    - NameID formats  
-    - Signature info (presence + algorithm)  
-    - Any embedded X.509 certificates  
-  - Saves the results into `chrome.storage.local`
-
-- `summary.html` + `summary.js`  
-  - Loads the parsed SAML data from `chrome.storage.local`  
-  - Renders a readable summary  
-  - Provides buttons to download:
-    - Summary (`saml_summary.txt`)  
-    - Raw XML (`saml_metadata.xml`)  
-    - Certificates as `.pem`
+2. Open `chrome://extensions`
+3. Enable **Developer mode**
+4. Click **Load unpacked**
+5. Select the repository folder
+6. Pin **Simplify SAML** to the toolbar if desired
 
 ---
 
-## 🔐 Permissions
+## How it works
 
-This extension uses a minimal set of permissions:
+The extension is intentionally small:
 
-- `scripting`  
-  - Used only to inject `content.js` into the active tab when you click the icon.
+- `background.js` — handles the user click, temporary session result, and summary-tab flow
+- `content.js` — reads the XML displayed in the active tab
+- `parser.js` — parses SAML metadata into structured data
+- `analyzer.js` — generates limited actionable observations
+- `summary.html` / `summary.js` / `summary.css` — renders the one-screen integration summary
 
-- `storage`  
-  - Used to store the parsed SAML metadata summary and raw XML locally so the summary tab can display them and offer downloads.
-
-- `host_permissions: "<all_urls>"`  
-  - SAML metadata can live on many different domains (cloud IdPs, internal portals, test environments, and file URLs).  
-  - This is required so the extension can read the page content on whatever metadata URL you’re viewing — **but only when you click the icon**.
-
-The extension does **not**:
-
-- Auto-run on every page
-- Track your browsing history
-- Send any data to external servers
-
-All parsing happens locally in your browser.
+All parsing happens locally.
 
 ---
 
-## 🔏 Privacy
+## Supported metadata
 
-Simplify SAML is designed to be privacy-first:
+Simplify SAML is focused on SAML 2.0 metadata containing:
 
-- No analytics  
-- No tracking  
-- No external network calls  
-- All data stays in your browser and is only used to render the summary and downloads
+- `EntityDescriptor`
+- `EntitiesDescriptor`
+- `SPSSODescriptor`
+- `IDPSSODescriptor`
 
-## Roadmap
-
-Simplify SAML is an early-stage open-source tool. Planned improvements include:
-
-### Metadata Validation
-
-Add basic checks to help users identify common SAML metadata issues, such as:
-
-* Missing or malformed Entity ID
-* Missing ACS URLs
-* Missing SSO or SLO endpoints
-* Invalid or unexpected XML structure
-* Duplicate or conflicting endpoint entries
-* Missing certificates where signing or encryption is expected
-
-### IdP and SP Detection
-
-Automatically detect whether the uploaded metadata appears to be:
-
-* Identity Provider metadata
-* Service Provider metadata
-* Combined or multi-role metadata
-* Unknown or unsupported metadata format
-
-This will help users quickly understand what type of SAML metadata they are reviewing.
-
-### Certificate Expiration Parsing
-
-Parse embedded X.509 certificates and show useful certificate details, including:
-
-* Certificate subject
-* Certificate issuer
-* Valid from date
-* Expiration date
-* Days until expiration
-* Expired certificate warnings
-* Soon-to-expire certificate warnings
-
-### Algorithm Warnings
-
-Add warnings for outdated, weak, or unexpected signing and digest algorithms, such as:
-
-* SHA-1
-* RSA-SHA1
-* Deprecated digest methods
-* Missing signing algorithm information
-* Unsupported or unusual algorithm values
-
-### Long-Term Ideas
-
-Future improvements may include:
-
-* Safer metadata comparison tools
-* Copy-friendly endpoint summaries
-* Exportable summaries
-* Sample sanitized metadata files
-* Better Chrome extension packaging
-* Additional browser support
-* More accessibility improvements
+If the extension detects a SAML Response, AuthnRequest, Logout message, or other non-metadata SAML XML, it identifies the document type instead of pretending it is metadata.
 
 ---
 
-## 📄 License
+## Current release
 
-MIT License © 2025 Alex Hoang  
-See `LICENSE` for full terms.
+### 1.1.7 — Visual Polish
+
+The current release keeps the one-screen workflow while adding restrained color and clearer visual hierarchy.
+
+Recent releases also added:
+
+- Metadata Compatibility
+- Nested federation support
+- Requested attributes
+- Smart primary endpoint selection
+- Collapsed alternates
+- Session-only storage
+- Minimal `activeTab` permissions
+- Signing/encryption certificate context
+- New Simplify SAML icon
+
+---
+
+## Contributing
+
+Issues and pull requests are welcome. Please keep the product philosophy in mind:
+
+> If a feature does not make **click → integrate** faster or safer, it probably does not belong on the main screen.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for additional guidance.
+
+---
+
+## Security
+
+For security-related information, see [SECURITY.md](SECURITY.md).
+
+Please avoid posting real internal SAML metadata, private URLs, or sensitive identity configuration in public issues.
+
+---
+
+## License
+
+MIT License. See [LICENSE.md](LICENSE.md).
