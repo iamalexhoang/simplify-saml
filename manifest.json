@@ -1,24 +1,29 @@
 {
   "manifest_version": 3,
   "name": "Simplify SAML",
-  "version": "1.0.0",
-  "description": "Summarizes SAML metadata (entityID, ACS, SSO, SLO, NameID formats, and certificates) in a human-readable view.",
+  "version": "1.1.7",
+  "description": "One-click SAML metadata summary with compatibility for federation metadata and requested attributes.",
   "permissions": [
+    "activeTab",
     "scripting",
     "storage"
   ],
-  "host_permissions": [
-    "<all_urls>"
-  ],
   "action": {
-    "default_title": "Simplify SAML"
+    "default_title": "Inspect SAML metadata",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
   },
   "background": {
     "service_worker": "background.js"
   },
   "icons": {
-    "16": "icon16.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
   }
 }
